@@ -21,6 +21,10 @@ Steps I took to get the program up and running:
 11. Wait till threads end processing
 12. End program
 
+To install and run:
+1. Download ProjectA.cs
+2. Open ProjectA.cs with any IDE with .NET and #C dependencies
+3. Run and Test to your liking
 
 Project B:
 
@@ -35,7 +39,13 @@ Steps I took to create the command:
 1. Launch the command terminal
 2. Try out different piping processes such as 'cat' and 'tee'
 3. Slowly build up the command by introducing error handling
-4. Slow down the transfer of text through the pipe
-5. Show real time data of the data transfer
-6. Test it numerous time and find out its memory usage.
+4. Slow down the transfer of data through the pipe
+5. Show real time information of the data transfer
+6. Test it numerous times and find out its memory usage.
+
+To install and run:
+1. Download ProjectB.txt
+2. Open Terminal
+3. Run ProjectB.txt with terminal
+4. Alternatively, copy command in text file and run it in the terminal
 
