@@ -1,13 +1,14 @@
 using System.Diagnostics;
 
 class BankAccount(int id, int initialBalance) { //class for storing methods and info of the back account
-    public int Id { get; } = id; //obtains the id of the bank account
+    private int Id { get; } = id; //obtains the id of the bank account
     private int balance = initialBalance; //stores the current balance of the account
     private readonly Mutex mutex = new(); //mutex object for synchronization and ensuring only one thread is modifying the bank account
     private readonly Stopwatch stopwatch = new(); //initializes stopwatch object for tracking time elapsed
 
     public void Deposit(int amount) { //method for depositing money into the account
-        stopwatch.Start(); //starts the stopwatch to track thread elapsed time
+        var stopwatch = new Stopwatch();
+        stopwatch.Restart(); //starts the stopwatch to track thread elapsed time
         mutex.WaitOne(); //acquires the lock for the thread to ensure it remains safe
         try {
             balance += amount; //increases the balance by the amount given in the main method
@@ -20,7 +21,8 @@ class BankAccount(int id, int initialBalance) { //class for storing methods and 
     }
 
     public void Withdraw(int amount) { //method for withdrawing money from the account
-        stopwatch.Start(); //starts the stopwatch to track thread elapsed time
+        var stopwatch = new Stopwatch();
+        stopwatch.Restart(); //starts the stopwatch to track thread elapsed time
         mutex.WaitOne(); //acquires the lock for the thread to ensure it remains safe
         try {
             if (balance >= amount) { //runs if current balance is higher than the amount given
@@ -37,7 +39,8 @@ class BankAccount(int id, int initialBalance) { //class for storing methods and 
     }
 
     public void Transfer(BankAccount target, int amount) { //method for transferring funds from one account to another
-        stopwatch.Start(); //starts the stopwatch to track the threads' elapsed time
+        var stopwatch = new Stopwatch();
+        stopwatch.Restart(); //starts the stopwatch to track thread elapsed time
 
         BankAccount first = this.Id < target.Id ? this : target; //determines the target bank account
         BankAccount second = this.Id < target.Id ? target : this; //determines the target bank account
@@ -46,8 +49,8 @@ class BankAccount(int id, int initialBalance) { //class for storing methods and 
         bool acquiredSecondLock = false; //initializes field to track lock status of second account
 
         try {
-            acquiredFirstLock = first.mutex.WaitOne(TimeSpan.FromMilliseconds(100)); //acquires the lock for the first account 
-            acquiredSecondLock = second.mutex.WaitOne(TimeSpan.FromMilliseconds(100)); //acquires the lock for the second account
+            acquiredFirstLock = first.mutex.WaitOne(TimeSpan.FromMilliseconds(500)); //acquires the lock for the first account 
+            acquiredSecondLock = second.mutex.WaitOne(TimeSpan.FromMilliseconds(500)); //acquires the lock for the second account
 
             if (acquiredFirstLock && acquiredSecondLock) { //condition that is met if both accounts are locked
                 if (balance >= amount) { //runs if current balance is higher than the amount transferred
@@ -58,7 +61,7 @@ class BankAccount(int id, int initialBalance) { //class for storing methods and 
                     Console.WriteLine($"Thread [{Environment.CurrentManagedThreadId}] transfer of {amount:C} from Account {Id} to Account {target.Id} failed due to insufficient funds.");
                 }
             } else { //error handling if the locks were not acquired within the specified 100 ms
-                Console.WriteLine($"Thread [{Environment.CurrentManagedThreadId}] Deadlock prevented: Transfer from Account {Id} to Account {target.Id}.");
+                Console.WriteLine($"Thread [{Environment.CurrentManagedThreadId}] Deadlock prevented: Transfer from Account {Id} to Account {target.Id} was not successful.");
             }
         } finally {
             if (acquiredFirstLock) first.mutex.ReleaseMutex(); //releases the first lock if it was acquired
