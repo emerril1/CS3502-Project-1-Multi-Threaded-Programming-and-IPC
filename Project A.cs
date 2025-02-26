@@ -58,7 +58,7 @@ class BankAccount(int id, int initialBalance) { //class for storing methods and 
                     Console.WriteLine($"Thread [{Environment.CurrentManagedThreadId}] transfer of {amount:C} from Account {Id} to Account {target.Id} failed due to insufficient funds.");
                 }
             } else { //error handling if the locks were not acquired within the specified 100 ms
-                Console.WriteLine($"Thread [{Environment.CurrentManagedThreadId}] Deadlock prevented: Transfer from Account {Id} to Account {target.Id} was retried.");
+                Console.WriteLine($"Thread [{Environment.CurrentManagedThreadId}] Deadlock prevented: Transfer from Account {Id} to Account {target.Id}.");
             }
         } finally {
             if (acquiredFirstLock) first.mutex.ReleaseMutex(); //releases the first lock if it was acquired
