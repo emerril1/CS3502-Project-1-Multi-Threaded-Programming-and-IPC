@@ -1,0 +1,15 @@
+if [ ! -f DoI.txt ]; then
+  echo "File does not exist!"
+  read -p "Press Enter to exit."
+  exit 1
+elif [ ! -s DoI.txt ]; then
+  echo "File is empty. Cannot copy contents!"
+  read -p "Press Enter to exit."
+  exit 1
+else
+  if ! pv -L 500 DoI.txt | grep -v "error" | tee copy.txt; then
+    echo "Processing failed, an error has occurred!"
+    read -p "Press Enter to exit."
+    exit 1
+  fi
+fi
